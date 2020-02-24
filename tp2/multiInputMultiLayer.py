@@ -36,8 +36,8 @@ W.append(np.random.normal(0, 0.01, (301, K)))
 
 
 def softmax(z):
-    exp = np.exp(z - z.max(0))
-    return np.array(exp / exp.sum(0))
+    exp = np.exp(z - z.max(1)[:, np.newaxis])
+    return np.array(exp / exp.sum(1)[:, np.newaxis])
 
 
 def softMaxInverse(z):
