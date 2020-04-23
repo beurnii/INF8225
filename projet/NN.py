@@ -23,6 +23,28 @@ class NN:
     def from_weights(cls, w):
         return cls(w)
 
+    @classmethod
+    def crossover(cls, dna_1, dna_2):
+        new_w = []
+        for m in dna_1:
+            new_m = np.array(dna_1.shape)
+            for i in m:
+                for j in i:
+                    new_m[j][i] = dna_1[i][j] if random.random > 0.5 else dna_2[i][j]
+            new_w.append(new_m)
+        return new_w
+
+    @classmethod
+    def mutate(cls, dna, rate):
+        _w = []
+        for m in dna:
+            new_m = np.copy(m)
+            for w in np.nditer(new_m, op_flags=['readwrite']):
+                if random.random() < rate:
+                    w[...] = random.random()
+            _w.append(new_m)
+        return _w
+
     def hidden_activation(self, Z):
         return np.maximum(Z, 0)
 
@@ -39,23 +61,10 @@ class NN:
         a = self.softmax_activation(Z)
         return np.argmax(a)
 
-    def get_copy(self):
+    def get_weights_copy(self):
         _w = []
         for w in self.W:
             _w.append(np.copy(w))
-
         return _w
 
-    def crossover(self):
-        pass
 
-    def mutate(self, rate):
-        _w = []
-        for m in self.W:
-            new_m = np.copy(m)
-            for w in np.nditer(new_m, op_flags=['readwrite']):
-                if random.random() < rate:
-                    w[...] = random.random()
-            _w.append(new_m)
-
-        return _w
